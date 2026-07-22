@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_add_as_lead"
+        android:icon="@drawable/ic_add_24"
+        android:title="@string/action_add_as_lead" />
+    <item
+        android:id="@+id/action_call_now"
+        android:icon="@drawable/ic_call_24"
+        android:title="@string/action_call_now" />
+</menu>

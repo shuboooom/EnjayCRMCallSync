@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.enjay.crm.callsync.util.PhoneNumberNormalizerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-22T19:18:55" hostname="Shubhams-Mac-mini.local" time="0.001">
+  <properties/>
+  <testcase name="lookup keys match plus91 input against local lead number" classname="com.enjay.crm.callsync.util.PhoneNumberNormalizerTest" time="0.001"/>
+  <testcase name="lookup keys include direct local indian mobile number" classname="com.enjay.crm.callsync.util.PhoneNumberNormalizerTest" time="0.0"/>
+  <testcase name="lookup keys match zero prefixed number against local lead number" classname="com.enjay.crm.callsync.util.PhoneNumberNormalizerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

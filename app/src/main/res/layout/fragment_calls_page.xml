@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/callsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp" />
+
+    <LinearLayout
+        android:id="@+id/skeletonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="24dp"
+        android:visibility="gone">
+
+        <include layout="@layout/item_call_log_skeleton" />
+        <include layout="@layout/item_call_log_skeleton" />
+        <include layout="@layout/item_call_log_skeleton" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/emptyTitleText"
+            style="@style/TextAppearance.Enjay.TitleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/calls_empty_title" />
+
+        <TextView
+            android:id="@+id/emptyBodyText"
+            style="@style/TextAppearance.Enjay.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/calls_empty_body" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/openPermissionsButton"
+            style="@style/Widget.Enjay.SecondaryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/action_open_permissions"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</FrameLayout>
