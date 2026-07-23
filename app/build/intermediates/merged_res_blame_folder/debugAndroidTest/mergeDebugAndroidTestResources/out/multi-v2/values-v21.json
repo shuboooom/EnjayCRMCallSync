@@ -1,0 +1,28 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.enjay.crm.callsync.test.app-mergeDebugAndroidTestResources-1:/values-v21/values-v21.xml",
+            "map": [
+                {
+                    "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/caches/8.10/transforms/77230c28f412219197e88866ffcab177/transformed/core-1.6.1/res/values-v21/values.xml",
+                    "from": {
+                        "startLines": "4,13",
+                        "startColumns": "0,0",
+                        "startOffsets": "146,621",
+                        "endLines": "12,21",
+                        "endColumns": "8,8",
+                        "endOffsets": "620,1093"
+                    },
+                    "to": {
+                        "startLines": "2,11",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,534",
+                        "endLines": "10,19",
+                        "endColumns": "8,8",
+                        "endOffsets": "529,1006"
+                    }
+                }
+            ]
+        }
+    ]
+}

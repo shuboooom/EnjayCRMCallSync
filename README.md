@@ -1,6 +1,8 @@
 # EnjayCRMCallSync Build Instructions
 
-This project is an android app/module to listen to calls and do some checks and link call logs with leads so it can sync with CRM
+This project is an android app/module to listen to calls and do some checks and link call logs with leads so it can sync with CRM.
+
+For a fuller setup guide plus architecture overview, see [SETUP_AND_ARCHITECTURE.md](/Users/shubhoooom/Documents/EnjayCRMCallSync/SETUP_AND_ARCHITECTURE.md).
 
 ## Requirements
 
