@@ -3,6 +3,7 @@ package com.enjay.crm.callsync.data.repository
 import android.util.Log
 import com.enjay.crm.callsync.data.local.LeadDao
 import com.enjay.crm.callsync.data.local.LeadEntity
+import com.enjay.crm.callsync.data.local.SyncState
 import com.enjay.crm.callsync.util.PhoneNumberNormalizer
 import kotlinx.coroutines.flow.Flow
 
@@ -17,16 +18,34 @@ class RoomLeadRepository(
     override suspend fun getLeadById(leadId: Long): LeadEntity? = leadDao.getLeadById(leadId)
 
     override suspend fun addLead(name: String, phone: String): Long {
+        findLeadByPhoneNumber(phone)?.let { existingLead ->
+            throw DuplicateLeadException(existingLead.id)
+        }
         val now = System.currentTimeMillis()
-        return leadDao.insertLead(
+        val insertedId = leadDao.insertLead(
             LeadEntity(
+                externalId = "",
+                serverId = null,
+                syncState = SyncState.PENDING_CREATE,
+                lastSyncAttemptAt = null,
+                lastSyncedAt = null,
+                syncError = null,
+                deletedAt = null,
                 name = name,
                 phone = phone,
-                phoneLookupKeys = com.enjay.crm.callsync.util.PhoneNumberNormalizer.lookupKeyBlob(phone),
+                phoneLookupKeys = PhoneNumberNormalizer.lookupKeyBlob(phone),
                 createdAt = now,
                 updatedAt = now,
             ),
         )
+        if (insertedId > 0L) {
+            leadDao.updateLead(
+                requireNotNull(leadDao.getLeadById(insertedId)).copy(
+                    externalId = "lead-$insertedId",
+                ),
+            )
+        }
+        return insertedId
     }
 
     override suspend fun findLeadByPhoneNumber(phoneNumber: String): LeadEntity? {

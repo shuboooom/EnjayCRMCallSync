@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Enjay CRM Call Sync</string>
+    <string name="app_name">Enjay Sync</string>
     <string name="title_permissions">Permissions</string>
     <string name="permissions_headline">Grant access once, then jump into the app.</string>
     <string name="permissions_subtitle">We only ask for the permissions needed to show call history, monitor calls in the foreground, match leads with contacts, and keep the service notification visible.</string>
@@ -30,7 +30,7 @@
     <string name="tab_personal">Personal</string>
     <string name="tab_business">Business</string>
     <string name="tab_leads">CRM Leads</string>
-    <string name="tab_more">More</string>
+    <string name="tab_more">Sync</string>
     <string name="calls_empty_title">No calls to show yet</string>
     <string name="calls_empty_body">Recent device call logs will appear here after permission is granted.</string>
     <string name="calls_personal_empty_title">No personal calls yet</string>
@@ -63,6 +63,7 @@
     <string name="validation_name_required">Please enter a lead name.</string>
     <string name="validation_phone_required">Please enter a phone number.</string>
     <string name="validation_phone_invalid">Please enter a valid phone number.</string>
+    <string name="validation_phone_duplicate">A lead with this phone number already exists.</string>
     <string name="validation_call_notes_required">Please enter call notes.</string>
     <string name="validation_call_outcome_required">Please enter call outcome.</string>
     <string name="validation_follow_up_required">Please select a follow-up date and time.</string>
@@ -84,8 +85,34 @@
     <string name="lead_call_end_label">End time</string>
     <string name="lead_call_duration_label">Duration</string>
     <string name="lead_call_timestamp_label">Timestamp</string>
-    <string name="more_placeholder_title">More is in development</string>
-    <string name="more_placeholder_body">Future tools and settings will live here.</string>
+    <string name="sync_page_title">Sync</string>
+    <string name="sync_page_subtitle">Monitor live sync state and trigger a manual catch-up when needed.</string>
+    <string name="action_sync_now">Sync now</string>
+    <string name="pending_sync_card_title">Pending offline data</string>
+    <string name="pending_sync_card_subtitle">These records are stored locally and still waiting to sync.</string>
+    <string name="pending_sync_leads_label">Leads</string>
+    <string name="pending_sync_call_logs_label">Call logs</string>
+    <string name="pending_sync_post_calls_label">Post-call details</string>
+    <string name="more_sync_status_default">Sync status: Idle</string>
+    <string name="more_sync_last_sync_default">Last sync: Never</string>
+    <string name="more_sync_status_format">Sync status: %1$s</string>
+    <string name="more_sync_last_sync_format">Last sync: %1$s</string>
+    <string name="more_sync_status_idle">Idle</string>
+    <string name="more_sync_never">Never</string>
+    <string name="more_sync_worker_type_default">Worker: None</string>
+    <string name="more_sync_worker_state_default">Worker state: Idle</string>
+    <string name="more_sync_retry_attempt_default">Retry attempt: 0</string>
+    <string name="more_sync_reason_default">Reason: None</string>
+    <string name="more_sync_last_error_default">Last error: None</string>
+    <string name="more_sync_worker_type_format">Worker: %1$s</string>
+    <string name="more_sync_worker_state_format">Worker state: %1$s</string>
+    <string name="more_sync_retry_attempt_format">Retry attempt: %1$d</string>
+    <string name="more_sync_reason_format">Reason: %1$s</string>
+    <string name="more_sync_last_error_format">Last error: %1$s</string>
+    <string name="more_sync_worker_none">None</string>
+    <string name="more_sync_worker_idle">Idle</string>
+    <string name="more_sync_reason_none">None</string>
+    <string name="more_sync_error_none">None</string>
     <string name="lead_not_found">Lead not found.</string>
     <string name="unknown_number">Unknown number</string>
     <string name="unknown_name">Unknown caller</string>
@@ -109,6 +136,10 @@
     <string name="post_call_notification_channel_description">Prompts to complete CRM call activity after a business call ends.</string>
     <string name="post_call_notification_title">Complete follow-up for %1$s</string>
     <string name="post_call_notification_body">Tap to add notes, outcome, follow-up date, and next action.</string>
+    <string name="sync_worker_channel_name">Background sync</string>
+    <string name="sync_worker_channel_description">Shows while offline CRM data is syncing.</string>
+    <string name="sync_worker_notification_title">Syncing CRM data</string>
+    <string name="sync_worker_notification_body">Uploading and refreshing leads, call logs, and post-call details.</string>
     <string name="call_permission_required_message">Phone call permission is needed for one-tap calling. Opening the dialer instead.</string>
     <string name="post_call_meta_format">%1$s • %2$s • %3$s</string>
     <string name="post_call_summary_title">Post-call activity added</string>

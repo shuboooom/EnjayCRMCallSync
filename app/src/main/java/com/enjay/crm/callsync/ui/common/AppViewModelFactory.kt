@@ -8,6 +8,7 @@ import com.enjay.crm.callsync.ui.calls.CallsViewModel
 import com.enjay.crm.callsync.ui.leads.AddLeadViewModel
 import com.enjay.crm.callsync.ui.leads.LeadDetailViewModel
 import com.enjay.crm.callsync.ui.leads.LeadsViewModel
+import com.enjay.crm.callsync.ui.more.MoreViewModel
 import com.enjay.crm.callsync.ui.postcall.PostCallDetailViewModel
 import com.enjay.crm.callsync.ui.permissions.PermissionsViewModel
 
@@ -36,6 +37,10 @@ class AppViewModelFactory(
 
             modelClass.isAssignableFrom(LeadsViewModel::class.java) -> {
                 LeadsViewModel(container.leadRepository) as T
+            }
+
+            modelClass.isAssignableFrom(MoreViewModel::class.java) -> {
+                MoreViewModel(application, container.syncRepository) as T
             }
 
             modelClass.isAssignableFrom(AddLeadViewModel::class.java) -> {

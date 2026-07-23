@@ -21,6 +21,7 @@ import com.enjay.crm.callsync.R
 import com.enjay.crm.callsync.data.model.CallLogItem
 import com.enjay.crm.callsync.databinding.FragmentCallsPageBinding
 import com.enjay.crm.callsync.ui.common.AppViewModelFactory
+import com.enjay.crm.callsync.ui.leads.LeadDetailFragment
 import com.enjay.crm.callsync.ui.leads.AddLeadFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -51,6 +52,7 @@ class CallsPageFragment : Fragment(R.layout.fragment_calls_page) {
             },
         )
         adapter.setOnCallActionClicked(::showCallActionsMenu)
+        adapter.setOnItemClicked(::handleCallItemTapped)
         binding.callsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.callsRecyclerView.adapter = adapter
 
@@ -163,6 +165,22 @@ class CallsPageFragment : Fragment(R.layout.fragment_calls_page) {
                 putString(AddLeadFragment.ARG_PREFILL_PHONE, item.phoneNumber)
             },
         )
+    }
+
+    private fun handleCallItemTapped(item: CallLogItem, anchor: View) {
+        if (callsTab == CallsTab.PERSONAL) {
+            showCallActionsMenu(item, anchor)
+            return
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            val leadId = viewModel.findLeadIdByPhoneNumber(item.phoneNumber) ?: return@launch
+            findNavController().navigate(
+                R.id.leadDetailFragment,
+                Bundle().apply {
+                    putLong(LeadDetailFragment.ARG_LEAD_ID, leadId)
+                },
+            )
+        }
     }
 
     companion object {

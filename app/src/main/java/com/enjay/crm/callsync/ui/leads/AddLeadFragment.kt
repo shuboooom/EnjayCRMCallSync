@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.enjay.crm.callsync.R
 import com.enjay.crm.callsync.databinding.FragmentAddLeadBinding
 import com.enjay.crm.callsync.ui.common.AppViewModelFactory
+import com.enjay.crm.callsync.sync.SyncWorkScheduler
 import kotlinx.coroutines.launch
 
 class AddLeadFragment : Fragment(R.layout.fragment_add_lead) {
@@ -52,6 +53,7 @@ class AddLeadFragment : Fragment(R.layout.fragment_add_lead) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.events.collect { event ->
                     if (event is AddLeadEvent.Success) {
+                        SyncWorkScheduler.enqueueImmediateSync(requireContext(), "lead_saved")
                         Snackbar.make(binding.root, R.string.lead_saved_message, Snackbar.LENGTH_SHORT).show()
                         findNavController().popBackStack()
                     }

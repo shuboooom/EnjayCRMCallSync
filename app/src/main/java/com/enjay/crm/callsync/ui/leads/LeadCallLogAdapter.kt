@@ -17,11 +17,16 @@ import com.enjay.crm.callsync.util.CallLogFormatter
 
 class LeadCallLogAdapter(
     private val onPostCallClicked: (Long) -> Unit,
+    private val onAddPostCallClicked: (LeadCallLogItemUiModel) -> Unit,
 ) : ListAdapter<LeadCallLogItemUiModel, LeadCallLogAdapter.LeadCallLogViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeadCallLogViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return LeadCallLogViewHolder(ItemLeadCallLogBinding.inflate(inflater, parent, false), onPostCallClicked)
+        return LeadCallLogViewHolder(
+            ItemLeadCallLogBinding.inflate(inflater, parent, false),
+            onPostCallClicked,
+            onAddPostCallClicked,
+        )
     }
 
     override fun onBindViewHolder(holder: LeadCallLogViewHolder, position: Int) {
@@ -31,6 +36,7 @@ class LeadCallLogAdapter(
     class LeadCallLogViewHolder(
         private val binding: ItemLeadCallLogBinding,
         private val onPostCallClicked: (Long) -> Unit,
+        private val onAddPostCallClicked: (LeadCallLogItemUiModel) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: LeadCallLogItemUiModel) {
@@ -61,11 +67,19 @@ class LeadCallLogAdapter(
             val hasDuration = callLog.durationSeconds > 0
             callBinding.durationIcon.visibility = if (hasDuration) View.VISIBLE else View.GONE
             callBinding.durationText.visibility = if (hasDuration) View.VISIBLE else View.GONE
-            callBinding.callActionIcon.visibility = View.GONE
+            callBinding.callActionIcon.visibility = View.VISIBLE
 
             val postCallActivity = item.postCallActivity
             binding.postCallSummaryCard.visibility = if (postCallActivity != null) View.VISIBLE else View.GONE
             if (postCallActivity != null) {
+                callBinding.callActionIcon.setImageResource(R.drawable.ic_call_24)
+                callBinding.callActionIcon.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(context, R.color.badge_outgoing_fg),
+                )
+                callBinding.callActionIcon.alpha = 0f
+                callBinding.callActionIcon.isClickable = false
+                callBinding.callActionIcon.isFocusable = false
+                callBinding.callActionIcon.setOnClickListener(null)
                 binding.viewPostCallText.setOnClickListener {
                     onPostCallClicked(postCallActivity.id)
                 }
@@ -73,6 +87,16 @@ class LeadCallLogAdapter(
                     onPostCallClicked(postCallActivity.id)
                 }
             } else {
+                callBinding.callActionIcon.alpha = 1f
+                callBinding.callActionIcon.isClickable = true
+                callBinding.callActionIcon.isFocusable = true
+                callBinding.callActionIcon.setImageResource(R.drawable.ic_add_24)
+                callBinding.callActionIcon.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(context, R.color.badge_outgoing_fg),
+                )
+                callBinding.callActionIcon.setOnClickListener {
+                    onAddPostCallClicked(item)
+                }
                 binding.viewPostCallText.setOnClickListener(null)
                 binding.postCallSummaryCard.setOnClickListener(null)
             }

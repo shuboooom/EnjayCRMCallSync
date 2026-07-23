@@ -9,4 +9,10 @@ class CallSyncTypeConverters {
 
     @TypeConverter
     fun stringToCallType(value: String): CallType = CallType.valueOf(value)
+
+    @TypeConverter
+    fun syncStateToString(value: SyncState): String = value.name
+
+    @TypeConverter
+    fun stringToSyncState(value: String): SyncState = SyncState.valueOf(value)
 }

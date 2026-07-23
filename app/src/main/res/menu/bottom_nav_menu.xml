@@ -10,6 +10,6 @@
         android:title="@string/tab_leads" />
     <item
         android:id="@+id/moreFragment"
-        android:icon="@drawable/ic_more_horiz_24"
+        android:icon="@drawable/sync_24dp"
         android:title="@string/tab_more" />
 </menu>

@@ -4,32 +4,60 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/more_vert_24dp.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.enjay.crm.callsync.app-debug-4:/layout_item_lead_detail_empty.xml.flat",
+        "source": "com.enjay.crm.callsync.app-main-6:/layout/item_lead_detail_empty.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_call_end_20.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_end_20.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xhdpi_ic_launcher_monochrome.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xhdpi/ic_launcher_monochrome.png"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_call_received_24dp.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/call_received_24dp.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_call_log_skeleton.xml.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_call_log_skeleton.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.enjay.crm.callsync.app-debug-4:/layout_item_lead_detail_section_header.xml.flat",
+        "source": "com.enjay.crm.callsync.app-main-6:/layout/item_lead_detail_section_header.xml"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_bg_skeleton_pill.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/bg_skeleton_pill.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_call_log_skeleton.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_call_log_skeleton.xml"
+    },
+    {
+        "merged": "com.enjay.crm.callsync.app-debug-4:/layout_fragment_lead_detail.xml.flat",
+        "source": "com.enjay.crm.callsync.app-main-6:/layout/fragment_lead_detail.xml"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_more_horiz_24.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_more_horiz_24.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/font_google_sans_regular.ttf.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/font/google_sans_regular.ttf"
-    },
-    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_bg_avatar_circle_placeholder.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/bg_avatar_circle_placeholder.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/font_google_sans_regular.ttf.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/font/google_sans_regular.ttf"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_bg_call_type_badge.xml.flat",
@@ -48,6 +76,10 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_message_24.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-hdpi_ic_launcher_background.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-hdpi/ic_launcher_background.png"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_add_24.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_add_24.xml"
     },
@@ -56,20 +88,20 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/phone_cancel_24dp.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/font_google_sans_bold.ttf.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/font/google_sans_bold.ttf"
-    },
-    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_lead_call_log.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_lead_call_log.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_call_24.xml.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_24.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/font_google_sans_bold.ttf.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/font/google_sans_bold.ttf"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_fragment_lead_detail.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/fragment_lead_detail.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_call_24.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_24.xml"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_call_log_header.xml.flat",
@@ -86,6 +118,10 @@
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_call_action_20.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_action_20.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xhdpi_ic_launcher_background.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xhdpi/ic_launcher_background.png"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_bg_call_avatar.xml.flat",
@@ -112,8 +148,8 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_missed_20.xml"
     },
     {
-        "merged": "com.enjay.crm.callsync.app-debug-4:/layout_item_lead_call_log.xml.flat",
-        "source": "com.enjay.crm.callsync.app-main-6:/layout/item_lead_call_log.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xhdpi/ic_launcher.png"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_fragment_more.xml.flat",
@@ -124,6 +160,10 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_event_24.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/navigation_main_nav_graph.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/navigation/main_nav_graph.xml"
     },
@@ -132,12 +172,24 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/bg_skeleton_block.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxhdpi_ic_launcher_background.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxhdpi/ic_launcher_background.png"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_chat_24dp.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/chat_24dp.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxhdpi_ic_launcher_monochrome.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxhdpi/ic_launcher_monochrome.png"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_schedule_16.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_schedule_16.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-mdpi_ic_launcher_background.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-mdpi/ic_launcher_background.png"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_activity_main.xml.flat",
@@ -148,8 +200,24 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_received_20.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxxhdpi_ic_launcher_background.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxxhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/menu_recent_call_actions_menu.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/menu/recent_call_actions_menu.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-mdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/menu_lead_detail_actions_menu.xml.flat",
@@ -164,32 +232,64 @@
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/menu/bottom_nav_menu.xml"
     },
     {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-hdpi_ic_launcher_monochrome.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-hdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-mdpi_ic_launcher_monochrome.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-mdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_sync_24dp.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/sync_24dp.xml"
+    },
+    {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_ic_call_made_20.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/ic_call_made_20.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-hdpi/ic_launcher.png"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/color_bottom_nav_color.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/color/bottom_nav_color.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_lead.xml.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_lead.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxxhdpi_ic_launcher_monochrome.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxxhdpi/ic_launcher_monochrome.png"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_permission.xml.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_permission.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_lead.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_lead.xml"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/font_google_sans.xml.flat",
         "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/font/google_sans.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_bg_call_meta_pill.xml.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/bg_call_meta_pill.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_permission.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_permission.xml"
     },
     {
-        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_item_call_log_new.xml.flat",
-        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/layout/item_call_log_new.xml"
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.enjay.crm.callsync.app-debug-4:/layout_item_device_contact_card.xml.flat",
+        "source": "com.enjay.crm.callsync.app-main-6:/layout/item_device_contact_card.xml"
+    },
+    {
+        "merged": "com.enjay.crm.callsync.app-debug-4:/layout_item_lead_detail_header.xml.flat",
+        "source": "com.enjay.crm.callsync.app-main-6:/layout/item_lead_detail_header.xml"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/drawable_bg_call_meta_pill.xml.flat",
+        "source": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-main-6:/drawable/bg_call_meta_pill.xml"
     },
     {
         "merged": "/Volumes/MacT7/OfficeFolder/android/Gradle/.gradle/daemon/8.10/com.enjay.crm.callsync.app-debug-4:/layout_fragment_permissions.xml.flat",

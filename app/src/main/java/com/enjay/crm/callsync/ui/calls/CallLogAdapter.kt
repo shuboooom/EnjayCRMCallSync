@@ -22,6 +22,7 @@ class CallLogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<CallLogListItem> = emptyList()
     private var onCallActionClicked: ((CallLogItem, android.view.View) -> Unit)? = null
+    private var onItemClicked: ((CallLogItem, android.view.View) -> Unit)? = null
     private var actionMode: CallActionMode = CallActionMode.MENU
 
     fun submitCalls(calls: List<CallLogItem>) {
@@ -31,6 +32,10 @@ class CallLogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun setOnCallActionClicked(listener: (CallLogItem, android.view.View) -> Unit) {
         onCallActionClicked = listener
+    }
+
+    fun setOnItemClicked(listener: (CallLogItem, android.view.View) -> Unit) {
+        onItemClicked = listener
     }
 
     fun setActionMode(mode: CallActionMode) {
@@ -55,7 +60,7 @@ class CallLogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = items[position]) {
             is CallLogListItem.Header -> (holder as HeaderViewHolder).bind(item)
-            is CallLogListItem.Entry -> (holder as EntryViewHolder).bind(item.call, actionMode, onCallActionClicked)
+            is CallLogListItem.Entry -> (holder as EntryViewHolder).bind(item.call, actionMode, onCallActionClicked, onItemClicked)
         }
     }
 
@@ -100,6 +105,7 @@ class CallLogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             item: CallLogItem,
             actionMode: CallActionMode,
             onCallActionClicked: ((CallLogItem, android.view.View) -> Unit)?,
+            onItemClicked: ((CallLogItem, android.view.View) -> Unit)?,
         ) {
             val context = binding.root.context
             val displayName = item.name?.takeIf { it.isNotBlank() }
@@ -119,6 +125,10 @@ class CallLogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.durationIcon.visibility = if (item.durationSeconds > 0) android.view.View.VISIBLE else android.view.View.GONE
             binding.durationText.visibility = if (item.durationSeconds > 0) android.view.View.VISIBLE else android.view.View.GONE
             binding.callActionIcon.setImageResource(actionMode.iconRes)
+            val touchTarget = binding.root.getChildAt(0)
+            touchTarget.setOnClickListener { anchor ->
+                onItemClicked?.invoke(item, anchor)
+            }
             binding.callActionIcon.setOnClickListener { anchor ->
                 onCallActionClicked?.invoke(item, anchor)
             }

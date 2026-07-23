@@ -4,8 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.NavController
@@ -13,12 +18,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.enjay.crm.callsync.EnjayCallSyncApp
 import com.enjay.crm.callsync.R
 import com.enjay.crm.callsync.core.AppPermissions
 import com.enjay.crm.callsync.databinding.ActivityMainBinding
 import com.enjay.crm.callsync.service.CallMonitoringServiceManager
+import com.enjay.crm.callsync.sync.SyncWorkScheduler
 import com.enjay.crm.callsync.util.applyInsetPadding
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -62,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
         binding.bottomNavigation.setOnItemReselectedListener { }
         setupActionBarWithNavController(navController, appBarConfiguration)
+        observeSyncBadge()
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val showBottomNav = destination.id != R.id.permissionsFragment &&
@@ -100,6 +111,33 @@ class MainActivity : AppCompatActivity() {
         binding.root.applyInsetPadding(top = true, bottom = false)
     }
 
+    private fun observeSyncBadge() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                combine(
+                    WorkManager.getInstance(this@MainActivity)
+                        .getWorkInfosForUniqueWorkLiveData(SyncWorkScheduler.IMMEDIATE_SYNC_WORK_NAME)
+                        .asFlow(),
+                    WorkManager.getInstance(this@MainActivity)
+                        .getWorkInfosForUniqueWorkLiveData(SyncWorkScheduler.PERIODIC_SYNC_WORK_NAME)
+                        .asFlow(),
+                ) { immediateWorkInfos, periodicWorkInfos ->
+                    immediateWorkInfos.anyRunning() || periodicWorkInfos.anyRunning()
+                }.collect { isSyncRunning ->
+                    if (isSyncRunning) {
+                        binding.bottomNavigation.getOrCreateBadge(R.id.moreFragment).apply {
+                            backgroundColor = ContextCompat.getColor(this@MainActivity, R.color.badge_outgoing_fg)
+                            isVisible = true
+                            clearNumber()
+                        }
+                    } else {
+                        binding.bottomNavigation.removeBadge(R.id.moreFragment)
+                    }
+                }
+            }
+        }
+    }
+
     private fun setBottomNavVisible(show: Boolean) {
         if (bottomNavVisible == show) return
         bottomNavVisible = show
@@ -127,5 +165,11 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         CallMonitoringServiceManager.sync(this, permissionStateProvider)
+        SyncWorkScheduler.ensurePeriodicSync(this)
+        SyncWorkScheduler.enqueueImmediateSync(this, "app_start")
+    }
+
+    private fun List<WorkInfo>.anyRunning(): Boolean {
+        return any { it.state == WorkInfo.State.RUNNING }
     }
 }

@@ -19,10 +19,19 @@ import com.enjay.crm.callsync.data.model.CallType
     indices = [
         Index(value = ["leadId"]),
         Index(value = ["deviceCallLogId"], unique = true),
+        Index(value = ["externalId"], unique = true),
+        Index(value = ["serverId"], unique = true),
     ],
 )
 data class LeadCallLogEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val externalId: String,
+    val serverId: String?,
+    val syncState: SyncState,
+    val lastSyncAttemptAt: Long?,
+    val lastSyncedAt: Long?,
+    val syncError: String?,
+    val deletedAt: Long?,
     val leadId: Long,
     val deviceCallLogId: Long,
     val phoneNumber: String,
@@ -32,4 +41,5 @@ data class LeadCallLogEntity(
     val durationSeconds: Long,
     val timestamp: Long,
     val createdAt: Long,
+    val updatedAt: Long,
 )

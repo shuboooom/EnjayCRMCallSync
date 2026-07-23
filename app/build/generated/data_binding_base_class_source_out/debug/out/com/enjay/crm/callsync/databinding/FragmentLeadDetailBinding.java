@@ -4,66 +4,30 @@ package com.enjay.crm.callsync.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
-import androidx.viewbinding.ViewBindings;
 import com.enjay.crm.callsync.R;
-import com.google.android.material.card.MaterialCardView;
 import java.lang.NullPointerException;
 import java.lang.Override;
-import java.lang.String;
 
 public final class FragmentLeadDetailBinding implements ViewBinding {
   @NonNull
-  private final ScrollView rootView;
+  private final RecyclerView rootView;
 
   @NonNull
-  public final TextView callLogsEmptyText;
+  public final RecyclerView leadDetailRecyclerView;
 
-  @NonNull
-  public final RecyclerView callLogsRecyclerView;
-
-  @NonNull
-  public final MaterialCardView deviceContactCard;
-
-  @NonNull
-  public final TextView deviceContactNameText;
-
-  @NonNull
-  public final TextView deviceContactPhoneText;
-
-  @NonNull
-  public final TextView leadIdText;
-
-  @NonNull
-  public final TextView nameText;
-
-  @NonNull
-  public final TextView phoneText;
-
-  private FragmentLeadDetailBinding(@NonNull ScrollView rootView,
-      @NonNull TextView callLogsEmptyText, @NonNull RecyclerView callLogsRecyclerView,
-      @NonNull MaterialCardView deviceContactCard, @NonNull TextView deviceContactNameText,
-      @NonNull TextView deviceContactPhoneText, @NonNull TextView leadIdText,
-      @NonNull TextView nameText, @NonNull TextView phoneText) {
+  private FragmentLeadDetailBinding(@NonNull RecyclerView rootView,
+      @NonNull RecyclerView leadDetailRecyclerView) {
     this.rootView = rootView;
-    this.callLogsEmptyText = callLogsEmptyText;
-    this.callLogsRecyclerView = callLogsRecyclerView;
-    this.deviceContactCard = deviceContactCard;
-    this.deviceContactNameText = deviceContactNameText;
-    this.deviceContactPhoneText = deviceContactPhoneText;
-    this.leadIdText = leadIdText;
-    this.nameText = nameText;
-    this.phoneText = phoneText;
+    this.leadDetailRecyclerView = leadDetailRecyclerView;
   }
 
   @Override
   @NonNull
-  public ScrollView getRoot() {
+  public RecyclerView getRoot() {
     return rootView;
   }
 
@@ -84,63 +48,12 @@ public final class FragmentLeadDetailBinding implements ViewBinding {
 
   @NonNull
   public static FragmentLeadDetailBinding bind(@NonNull View rootView) {
-    // The body of this method is generated in a way you would not otherwise write.
-    // This is done to optimize the compiled bytecode for size and performance.
-    int id;
-    missingId: {
-      id = R.id.callLogsEmptyText;
-      TextView callLogsEmptyText = ViewBindings.findChildViewById(rootView, id);
-      if (callLogsEmptyText == null) {
-        break missingId;
-      }
-
-      id = R.id.callLogsRecyclerView;
-      RecyclerView callLogsRecyclerView = ViewBindings.findChildViewById(rootView, id);
-      if (callLogsRecyclerView == null) {
-        break missingId;
-      }
-
-      id = R.id.deviceContactCard;
-      MaterialCardView deviceContactCard = ViewBindings.findChildViewById(rootView, id);
-      if (deviceContactCard == null) {
-        break missingId;
-      }
-
-      id = R.id.deviceContactNameText;
-      TextView deviceContactNameText = ViewBindings.findChildViewById(rootView, id);
-      if (deviceContactNameText == null) {
-        break missingId;
-      }
-
-      id = R.id.deviceContactPhoneText;
-      TextView deviceContactPhoneText = ViewBindings.findChildViewById(rootView, id);
-      if (deviceContactPhoneText == null) {
-        break missingId;
-      }
-
-      id = R.id.leadIdText;
-      TextView leadIdText = ViewBindings.findChildViewById(rootView, id);
-      if (leadIdText == null) {
-        break missingId;
-      }
-
-      id = R.id.nameText;
-      TextView nameText = ViewBindings.findChildViewById(rootView, id);
-      if (nameText == null) {
-        break missingId;
-      }
-
-      id = R.id.phoneText;
-      TextView phoneText = ViewBindings.findChildViewById(rootView, id);
-      if (phoneText == null) {
-        break missingId;
-      }
-
-      return new FragmentLeadDetailBinding((ScrollView) rootView, callLogsEmptyText,
-          callLogsRecyclerView, deviceContactCard, deviceContactNameText, deviceContactPhoneText,
-          leadIdText, nameText, phoneText);
+    if (rootView == null) {
+      throw new NullPointerException("rootView");
     }
-    String missingId = rootView.getResources().getResourceName(id);
-    throw new NullPointerException("Missing required view with ID: ".concat(missingId));
+
+    RecyclerView leadDetailRecyclerView = (RecyclerView) rootView;
+
+    return new FragmentLeadDetailBinding((RecyclerView) rootView, leadDetailRecyclerView);
   }
 }

@@ -1,12 +1,12 @@
 package com.enjay.crm.callsync.ui.leads
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.enjay.crm.callsync.R
+import com.enjay.crm.callsync.data.repository.DuplicateLeadException
 import com.enjay.crm.callsync.data.repository.LeadRepository
 import com.enjay.crm.callsync.util.PhoneNumberNormalizer
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 sealed interface AddLeadEvent {
     data object Success : AddLeadEvent
@@ -30,8 +30,8 @@ class AddLeadViewModel(
 
         val nameError = if (trimmedName.isBlank()) com.enjay.crm.callsync.R.string.validation_name_required else null
         val phoneError = when {
-            trimmedPhone.isBlank() -> com.enjay.crm.callsync.R.string.validation_phone_required
-            !PhoneNumberNormalizer.isViable(trimmedPhone) -> com.enjay.crm.callsync.R.string.validation_phone_invalid
+            trimmedPhone.isBlank() -> R.string.validation_phone_required
+            !PhoneNumberNormalizer.isViable(trimmedPhone) -> R.string.validation_phone_invalid
             else -> null
         }
 
@@ -42,10 +42,12 @@ class AddLeadViewModel(
             )
         }
 
-        viewModelScope.launch {
+        return try {
             leadRepository.addLead(trimmedName, trimmedPhone)
             eventsChannel.send(AddLeadEvent.Success)
+            AddLeadValidationResult()
+        } catch (_: DuplicateLeadException) {
+            AddLeadValidationResult(phoneErrorRes = R.string.validation_phone_duplicate)
         }
-        return AddLeadValidationResult()
     }
 }

@@ -22,6 +22,8 @@ import androidx.core.content.getSystemService
 import com.enjay.crm.callsync.EnjayCallSyncApp
 import com.enjay.crm.callsync.R
 import com.enjay.crm.callsync.data.local.LeadCallLogEntity
+import com.enjay.crm.callsync.data.local.SyncState
+import com.enjay.crm.callsync.sync.SyncWorkScheduler
 import com.enjay.crm.callsync.ui.postcall.PostCallActivityFormActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +45,7 @@ class CallMonitoringService : Service() {
     private var phoneStateListener: PhoneStateListener? = null
     private var isRegistered = false
     private var currentCallState = TelephonyManager.CALL_STATE_IDLE
-    private var lastProcessedCallLogId: Long? = null
+    private val recentlyHandledCallLogIds = LinkedHashSet<Long>()
 
     override fun onCreate() {
         super.onCreate()
@@ -134,89 +136,111 @@ class CallMonitoringService : Service() {
 
     private fun captureCompletedCall(referenceTime: Long) {
         serviceScope.launch {
-            Log.d(TAG, "captureCompletedCall: referenceTime=$referenceTime lastProcessedCallLogId=$lastProcessedCallLogId")
+            Log.d(
+                TAG,
+                "captureCompletedCall: referenceTime=$referenceTime recentlyHandledCallLogIds=$recentlyHandledCallLogIds",
+            )
             repeat(8) { attempt ->
                 if (attempt > 0) delay(1000L) else delay(1500L)
-                val recentCalls = appContainer.callLogRepository.getRecentCalls(limit = 5)
+                val recentCalls = appContainer.callLogRepository.getRecentCalls(limit = RECENT_CALL_SCAN_LIMIT)
                 Log.d(
                     TAG,
                     "captureCompletedCall: attempt=$attempt recentCalls=${
                         recentCalls.joinToString { "${it.id}:${it.phoneNumber}:${it.callType}:${it.timestamp}:${it.durationSeconds}" }
                     }",
                 )
-                val latestCall = recentCalls.firstOrNull()
-                if (latestCall == null) {
-                    Log.d(TAG, "captureCompletedCall: no recent call found on attempt=$attempt")
-                    return@repeat
-                }
-                if (lastProcessedCallLogId == latestCall.id) {
-                    Log.d(TAG, "captureCompletedCall: skipping already processed callLogId=${latestCall.id}")
+                val candidateCalls = recentCalls
+                    .filter { it.timestamp in (referenceTime - MATCH_WINDOW_BEFORE_MS)..(referenceTime + MATCH_WINDOW_AFTER_MS) }
+                    .filterNot { recentlyHandledCallLogIds.contains(it.id) }
+                    .sortedBy { it.timestamp }
+
+                if (candidateCalls.isEmpty()) {
+                    Log.d(TAG, "captureCompletedCall: no unhandled candidate calls in match window on attempt=$attempt")
                     return@repeat
                 }
 
-                val phoneNumber = latestCall.phoneNumber?.trim().orEmpty()
-                if (phoneNumber.isBlank()) {
-                    Log.d(TAG, "captureCompletedCall: blank phone number for callLogId=${latestCall.id}")
-                    return@repeat
-                }
-                if (latestCall.timestamp !in (referenceTime - MATCH_WINDOW_BEFORE_MS)..(referenceTime + MATCH_WINDOW_AFTER_MS)) {
+                var insertedAny = false
+                candidateCalls.forEach { call ->
+                    val phoneNumber = call.phoneNumber?.trim().orEmpty()
+                    if (phoneNumber.isBlank()) {
+                        markCallLogHandled(call.id)
+                        Log.d(TAG, "captureCompletedCall: blank phone number for callLogId=${call.id}")
+                        return@forEach
+                    }
+
+                    val lead = appContainer.leadRepository.findLeadByPhoneNumber(phoneNumber)
+                    if (lead == null) {
+                        markCallLogHandled(call.id)
+                        Log.d(TAG, "captureCompletedCall: no lead match for callLogId=${call.id} phone=$phoneNumber")
+                        return@forEach
+                    }
+
+                    val startTime = call.timestamp
+                    val endTime = startTime + (call.durationSeconds * 1000L)
+                    val insertedId = appContainer.leadCallLogRepository.addLeadCallLog(
+                        LeadCallLogEntity(
+                            externalId = "call-${call.id}",
+                            serverId = null,
+                            syncState = SyncState.PENDING_CREATE,
+                            lastSyncAttemptAt = null,
+                            lastSyncedAt = null,
+                            syncError = null,
+                            deletedAt = null,
+                            leadId = lead.id,
+                            deviceCallLogId = call.id,
+                            phoneNumber = phoneNumber,
+                            callType = call.callType,
+                            startTime = startTime,
+                            endTime = endTime,
+                            durationSeconds = call.durationSeconds,
+                            timestamp = call.timestamp,
+                            createdAt = System.currentTimeMillis(),
+                            updatedAt = System.currentTimeMillis(),
+                        ),
+                    )
                     Log.d(
                         TAG,
-                        "captureCompletedCall: latest call outside window callLogId=${latestCall.id} callTs=${latestCall.timestamp} reference=$referenceTime",
+                        "captureCompletedCall: insertResult=$insertedId leadId=${lead.id} callLogId=${call.id} phone=$phoneNumber",
                     )
-                    return@repeat
-                }
+                    markCallLogHandled(call.id)
+                    if (insertedId <= 0L) return@forEach
 
-                val lead = appContainer.leadRepository.findLeadByPhoneNumber(phoneNumber)
-                if (lead == null) {
-                    Log.d(TAG, "captureCompletedCall: no lead match for callLogId=${latestCall.id} phone=$phoneNumber")
-                    return@repeat
-                }
-
-                val startTime = latestCall.timestamp
-                val endTime = startTime + (latestCall.durationSeconds * 1000L)
-                val insertedId = appContainer.leadCallLogRepository.addLeadCallLog(
-                    LeadCallLogEntity(
-                        leadId = lead.id,
-                        deviceCallLogId = latestCall.id,
-                        phoneNumber = phoneNumber,
-                        callType = latestCall.callType,
-                        startTime = startTime,
-                        endTime = endTime,
-                        durationSeconds = latestCall.durationSeconds,
-                        timestamp = latestCall.timestamp,
-                        createdAt = System.currentTimeMillis(),
-                    ),
-                )
-                Log.d(
-                    TAG,
-                    "captureCompletedCall: insertResult=$insertedId leadId=${lead.id} callLogId=${latestCall.id} phone=$phoneNumber",
-                )
-                if (insertedId > 0L) {
-                    lastProcessedCallLogId = latestCall.id
-                    if (latestCall.durationSeconds <= 0L) {
+                    insertedAny = true
+                    SyncWorkScheduler.enqueueImmediateSync(this@CallMonitoringService, "call_log_saved")
+                    if (call.durationSeconds <= 0L) {
                         Log.d(
                             TAG,
-                            "captureCompletedCall: skipping post-call prompt for unanswered callLogId=${latestCall.id}",
+                            "captureCompletedCall: skipping post-call prompt for unanswered callLogId=${call.id}",
                         )
-                        return@launch
+                        return@forEach
                     }
+
                     val launchIntent = createPostCallActivityIntent(
                         leadId = lead.id,
                         leadCallLogId = insertedId,
                         leadName = lead.name,
                         phoneNumber = phoneNumber,
-                        callType = latestCall.callType.name,
-                        callTimestamp = latestCall.timestamp,
-                        callDurationSeconds = latestCall.durationSeconds,
+                        callType = call.callType.name,
+                        callTimestamp = call.timestamp,
+                        callDurationSeconds = call.durationSeconds,
                     )
                     if (!launchPostCallActivityInApp(launchIntent)) {
                         showPostCallNotification(launchIntent, lead.name, phoneNumber, insertedId)
                     }
+                }
+
+                if (insertedAny) {
                     return@launch
                 }
             }
             Log.d(TAG, "captureCompletedCall: exhausted attempts without insert")
+        }
+    }
+
+    private fun markCallLogHandled(callLogId: Long) {
+        recentlyHandledCallLogIds += callLogId
+        while (recentlyHandledCallLogIds.size > MAX_HANDLED_CALL_LOG_IDS) {
+            recentlyHandledCallLogIds.remove(recentlyHandledCallLogIds.first())
         }
     }
 
@@ -337,6 +361,8 @@ class CallMonitoringService : Service() {
         private const val POST_CALL_NOTIFICATION_CHANNEL_ID = "post_call_activity"
         private const val NOTIFICATION_ID = 4012
         private const val POST_CALL_NOTIFICATION_ID_BASE = 9000
+        private const val RECENT_CALL_SCAN_LIMIT = 20
+        private const val MAX_HANDLED_CALL_LOG_IDS = 64
         private const val MATCH_WINDOW_BEFORE_MS = 120_000L
         private const val MATCH_WINDOW_AFTER_MS = 15_000L
         private const val TAG = "EnjayCallSync"

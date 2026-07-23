@@ -78,4 +78,10 @@ class CallsViewModel(
         if (_uiState.value.selectedTab == tab) return
         _uiState.value = _uiState.value.copy(selectedTab = tab)
     }
+
+    suspend fun findLeadIdByPhoneNumber(phoneNumber: String?): Long? {
+        val value = phoneNumber?.trim().orEmpty()
+        if (value.isBlank()) return null
+        return leadRepository.findLeadByPhoneNumber(value)?.id
+    }
 }

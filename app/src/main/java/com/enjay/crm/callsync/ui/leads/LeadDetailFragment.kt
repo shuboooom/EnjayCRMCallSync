@@ -15,10 +15,12 @@ import androidx.core.view.MenuProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.enjay.crm.callsync.R
 import com.enjay.crm.callsync.databinding.FragmentLeadDetailBinding
+import com.enjay.crm.callsync.ui.postcall.PostCallActivityFormActivity
 import com.enjay.crm.callsync.ui.common.AppViewModelFactory
 import kotlinx.coroutines.launch
 
@@ -40,9 +42,19 @@ class LeadDetailFragment : Fragment(R.layout.fragment_lead_detail) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLeadDetailBinding.bind(view)
         setupToolbarActions()
-        val callLogAdapter = LeadCallLogAdapter(::openPostCallDetail)
-        binding.callLogsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.callLogsRecyclerView.adapter = callLogAdapter
+        val headerAdapter = LeadDetailHeaderAdapter()
+        val deviceContactAdapter = DeviceContactAdapter()
+        val sectionHeaderAdapter = LeadDetailSectionHeaderAdapter()
+        val emptyAdapter = LeadDetailEmptyAdapter()
+        val callLogAdapter = LeadCallLogAdapter(::openPostCallDetail, ::openAddPostCall)
+        binding.leadDetailRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.leadDetailRecyclerView.adapter = ConcatAdapter(
+            headerAdapter,
+            deviceContactAdapter,
+            sectionHeaderAdapter,
+            emptyAdapter,
+            callLogAdapter,
+        )
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -56,27 +68,12 @@ class LeadDetailFragment : Fragment(R.layout.fragment_lead_detail) {
                         return@collect
                     }
 
-                    binding.nameText.text = lead.name
-                    binding.phoneText.text = lead.phone
-                    binding.leadIdText.text = lead.id.toString()
+                    headerAdapter.submitLead(lead)
                     currentPhoneNumber = lead.phone
 
-                    val deviceContact = state.deviceContact
-                    binding.deviceContactCard.visibility = if (deviceContact != null) View.VISIBLE else View.GONE
-                    if (deviceContact != null) {
-                        binding.deviceContactNameText.text = deviceContact.displayName
-                        binding.deviceContactPhoneText.text = deviceContact.phoneNumber
-                        binding.deviceContactCard.setOnClickListener {
-                            startActivity(
-                                Intent(Intent.ACTION_VIEW, deviceContact.lookupUri).apply {
-                                    setDataAndType(deviceContact.lookupUri, ContactsContract.Contacts.CONTENT_ITEM_TYPE)
-                                },
-                            )
-                        }
-                    }
-
+                    deviceContactAdapter.submitDeviceContact(state.deviceContact)
                     callLogAdapter.submitList(state.callLogs)
-                    binding.callLogsEmptyText.visibility = if (state.callLogs.isEmpty()) View.VISIBLE else View.GONE
+                    emptyAdapter.setVisible(state.callLogs.isEmpty())
                 }
             }
         }
@@ -128,6 +125,22 @@ class LeadDetailFragment : Fragment(R.layout.fragment_lead_detail) {
             R.id.postCallDetailFragment,
             Bundle().apply {
                 putLong("postCallActivityId", postCallActivityId)
+            },
+        )
+    }
+
+    private fun openAddPostCall(item: LeadCallLogItemUiModel) {
+        val lead = viewModel.uiState.value.lead ?: return
+        val callLog = item.callLog
+        startActivity(
+            Intent(requireContext(), PostCallActivityFormActivity::class.java).apply {
+                putExtra(PostCallActivityFormActivity.EXTRA_LEAD_ID, lead.id)
+                putExtra(PostCallActivityFormActivity.EXTRA_LEAD_CALL_LOG_ID, callLog.id)
+                putExtra(PostCallActivityFormActivity.EXTRA_LEAD_NAME, lead.name)
+                putExtra(PostCallActivityFormActivity.EXTRA_PHONE_NUMBER, callLog.phoneNumber)
+                putExtra(PostCallActivityFormActivity.EXTRA_CALL_TYPE, callLog.callType.name)
+                putExtra(PostCallActivityFormActivity.EXTRA_CALL_TIMESTAMP, callLog.timestamp)
+                putExtra(PostCallActivityFormActivity.EXTRA_CALL_DURATION_SECONDS, callLog.durationSeconds)
             },
         )
     }
