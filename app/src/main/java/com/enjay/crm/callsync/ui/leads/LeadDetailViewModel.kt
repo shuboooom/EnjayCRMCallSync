@@ -8,6 +8,7 @@ import com.enjay.crm.callsync.data.model.DeviceContactMatch
 import com.enjay.crm.callsync.data.repository.ContactsRepository
 import com.enjay.crm.callsync.data.repository.LeadCallLogRepository
 import com.enjay.crm.callsync.data.repository.LeadRepository
+import com.enjay.crm.callsync.data.repository.PostCallActivityRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,13 +20,14 @@ data class LeadDetailUiState(
     val isLoading: Boolean = true,
     val lead: LeadEntity? = null,
     val deviceContact: DeviceContactMatch? = null,
-    val callLogs: List<LeadCallLogEntity> = emptyList(),
+    val callLogs: List<LeadCallLogItemUiModel> = emptyList(),
 )
 
 class LeadDetailViewModel(
     private val leadId: Long,
     private val leadRepository: LeadRepository,
     private val leadCallLogRepository: LeadCallLogRepository,
+    private val postCallActivityRepository: PostCallActivityRepository,
     private val contactsRepository: ContactsRepository,
 ) : ViewModel() {
 
@@ -40,15 +42,22 @@ class LeadDetailViewModel(
             combine(
                 leadRepository.observeLeadById(leadId),
                 leadCallLogRepository.observeLeadCallLogs(leadId),
-            ) { lead, callLogs ->
-                lead to callLogs
-            }.collectLatest { (lead, callLogs) ->
+                postCallActivityRepository.observePostCallActivitiesByLeadId(leadId),
+            ) { lead, callLogs, postCallActivities ->
+                Triple(lead, callLogs, postCallActivities)
+            }.collectLatest { (lead, callLogs, postCallActivities) ->
                 val contact = lead?.let { contactsRepository.findContactByPhoneNumber(it.phone) }
+                val postCallByCallLogId = postCallActivities.associateBy { it.leadCallLogId }
                 _uiState.value = LeadDetailUiState(
                     isLoading = false,
                     lead = lead,
                     deviceContact = contact,
-                    callLogs = callLogs,
+                    callLogs = callLogs.map { callLog ->
+                        LeadCallLogItemUiModel(
+                            callLog = callLog,
+                            postCallActivity = postCallByCallLogId[callLog.id],
+                        )
+                    },
                 )
             }
         }

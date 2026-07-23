@@ -66,7 +66,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             val showBottomNav = destination.id != R.id.permissionsFragment &&
                 destination.id != R.id.addLeadFragment &&
-                destination.id != R.id.leadDetailFragment
+                destination.id != R.id.leadDetailFragment &&
+                destination.id != R.id.postCallDetailFragment
             setBottomNavVisible(showBottomNav)
             binding.navHostFragment.visibility = View.VISIBLE
             binding.startupLoadingOverlay.visibility = View.GONE
@@ -81,6 +82,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.moreFragment -> R.string.tab_more
                 R.id.addLeadFragment -> R.string.title_add_lead
                 R.id.leadDetailFragment -> R.string.title_lead_detail
+                R.id.postCallDetailFragment -> R.string.title_post_call_detail
                 else -> R.string.app_name
             }
             binding.toolbar.setTitle(titleRes)

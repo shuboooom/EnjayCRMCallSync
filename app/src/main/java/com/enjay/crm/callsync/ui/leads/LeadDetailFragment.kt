@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.enjay.crm.callsync.R
@@ -39,7 +40,7 @@ class LeadDetailFragment : Fragment(R.layout.fragment_lead_detail) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLeadDetailBinding.bind(view)
         setupToolbarActions()
-        val callLogAdapter = LeadCallLogAdapter()
+        val callLogAdapter = LeadCallLogAdapter(::openPostCallDetail)
         binding.callLogsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.callLogsRecyclerView.adapter = callLogAdapter
 
@@ -120,6 +121,15 @@ class LeadDetailFragment : Fragment(R.layout.fragment_lead_detail) {
         currentPhoneNumber?.takeIf { it.isNotBlank() }?.let { phoneNumber ->
             startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$phoneNumber")))
         }
+    }
+
+    private fun openPostCallDetail(postCallActivityId: Long) {
+        findNavController().navigate(
+            R.id.postCallDetailFragment,
+            Bundle().apply {
+                putLong("postCallActivityId", postCallActivityId)
+            },
+        )
     }
 
     override fun onDestroyView() {

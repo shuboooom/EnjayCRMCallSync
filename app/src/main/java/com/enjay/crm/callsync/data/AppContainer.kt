@@ -11,7 +11,9 @@ import com.enjay.crm.callsync.data.repository.DeviceContactsRepository
 import com.enjay.crm.callsync.data.repository.LeadCallLogRepository
 import com.enjay.crm.callsync.data.repository.LeadRepository
 import com.enjay.crm.callsync.data.repository.PermissionStateProvider
+import com.enjay.crm.callsync.data.repository.PostCallActivityRepository
 import com.enjay.crm.callsync.data.repository.RoomLeadCallLogRepository
+import com.enjay.crm.callsync.data.repository.RoomPostCallActivityRepository
 import com.enjay.crm.callsync.data.repository.RoomLeadRepository
 
 class AppContainer(context: Context) {
@@ -22,7 +24,7 @@ class AppContainer(context: Context) {
             appContext,
             AppDatabase::class.java,
             "enjay-call-sync.db",
-        ).addMigrations(AppDatabase.MIGRATION_1_2).build()
+        ).addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3).build()
     }
 
     val leadRepository: LeadRepository by lazy {
@@ -31,6 +33,10 @@ class AppContainer(context: Context) {
 
     val leadCallLogRepository: LeadCallLogRepository by lazy {
         RoomLeadCallLogRepository(database.leadCallLogDao())
+    }
+
+    val postCallActivityRepository: PostCallActivityRepository by lazy {
+        RoomPostCallActivityRepository(database.postCallActivityDao())
     }
 
     val callLogRepository: CallLogRepository by lazy {

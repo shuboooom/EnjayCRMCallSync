@@ -3,59 +3,83 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="8dp"
     app:cardBackgroundColor="@color/surface_card"
-    app:cardCornerRadius="20dp"
+    app:cardCornerRadius="25dp"
     app:cardElevation="0dp"
-    app:strokeColor="@color/outline_variant"
-    app:strokeWidth="1dp">
+    app:strokeWidth="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/phoneNumberText"
-            style="@style/TextAppearance.Enjay.TitleMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <include
+            android:id="@+id/callLogCard"
+            layout="@layout/item_call_log" />
 
-        <TextView
-            android:id="@+id/callTypeText"
-            style="@style/TextAppearance.Enjay.BodyMedium"
+        <LinearLayout
+            android:id="@+id/postCallSummaryCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="18dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="14dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-        <TextView
-            android:id="@+id/startTimeText"
-            style="@style/TextAppearance.Enjay.BodyMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="12dp"
+                android:background="@color/outline_variant" />
 
-        <TextView
-            android:id="@+id/endTimeText"
-            style="@style/TextAppearance.Enjay.BodyMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/durationText"
-            style="@style/TextAppearance.Enjay.BodyMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+                <TextView
+                    android:id="@+id/postCallSummaryTitleText"
+                    style="@style/TextAppearance.Enjay.LabelMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/post_call_summary_title"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/timestampText"
-            style="@style/TextAppearance.Enjay.BodyMedium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp" />
+                <TextView
+                    android:id="@+id/postCallSummaryBodyText"
+                    style="@style/TextAppearance.Enjay.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@string/post_call_summary_body" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginStart="10dp"
+                android:id="@+id/viewPostCallText"
+                style="@style/TextAppearance.Enjay.LabelMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="8dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="6dp"
+                android:text="@string/action_view_details"
+                android:textColor="@color/text_secondary"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

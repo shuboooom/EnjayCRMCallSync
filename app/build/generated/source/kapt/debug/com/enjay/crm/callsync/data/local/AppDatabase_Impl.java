@@ -31,24 +31,30 @@ public final class AppDatabase_Impl extends AppDatabase {
 
   private volatile LeadCallLogDao _leadCallLogDao;
 
+  private volatile PostCallActivityDao _postCallActivityDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(3) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `leads` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `phone` TEXT NOT NULL, `phoneLookupKeys` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `lead_call_logs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `leadId` INTEGER NOT NULL, `deviceCallLogId` INTEGER NOT NULL, `phoneNumber` TEXT NOT NULL, `callType` TEXT NOT NULL, `startTime` INTEGER NOT NULL, `endTime` INTEGER NOT NULL, `durationSeconds` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, FOREIGN KEY(`leadId`) REFERENCES `leads`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
         db.execSQL("CREATE INDEX IF NOT EXISTS `index_lead_call_logs_leadId` ON `lead_call_logs` (`leadId`)");
         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_lead_call_logs_deviceCallLogId` ON `lead_call_logs` (`deviceCallLogId`)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `post_call_activities` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `leadId` INTEGER NOT NULL, `leadCallLogId` INTEGER NOT NULL, `callNotes` TEXT NOT NULL, `callOutcome` TEXT NOT NULL, `followUpAt` INTEGER NOT NULL, `nextAction` TEXT NOT NULL, `additionalRemarks` TEXT, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, FOREIGN KEY(`leadId`) REFERENCES `leads`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`leadCallLogId`) REFERENCES `lead_call_logs`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_post_call_activities_leadId` ON `post_call_activities` (`leadId`)");
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_post_call_activities_leadCallLogId` ON `post_call_activities` (`leadCallLogId`)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '971193405110fd5aaf2d8dc8b9d3d0ab')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '135693dd542c9244891b123893baac26')");
       }
 
       @Override
       public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS `leads`");
         db.execSQL("DROP TABLE IF EXISTS `lead_call_logs`");
+        db.execSQL("DROP TABLE IF EXISTS `post_call_activities`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -132,9 +138,33 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoLeadCallLogs + "\n"
                   + " Found:\n" + _existingLeadCallLogs);
         }
+        final HashMap<String, TableInfo.Column> _columnsPostCallActivities = new HashMap<String, TableInfo.Column>(10);
+        _columnsPostCallActivities.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("leadId", new TableInfo.Column("leadId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("leadCallLogId", new TableInfo.Column("leadCallLogId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("callNotes", new TableInfo.Column("callNotes", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("callOutcome", new TableInfo.Column("callOutcome", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("followUpAt", new TableInfo.Column("followUpAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("nextAction", new TableInfo.Column("nextAction", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("additionalRemarks", new TableInfo.Column("additionalRemarks", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("createdAt", new TableInfo.Column("createdAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsPostCallActivities.put("updatedAt", new TableInfo.Column("updatedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysPostCallActivities = new HashSet<TableInfo.ForeignKey>(2);
+        _foreignKeysPostCallActivities.add(new TableInfo.ForeignKey("leads", "CASCADE", "NO ACTION", Arrays.asList("leadId"), Arrays.asList("id")));
+        _foreignKeysPostCallActivities.add(new TableInfo.ForeignKey("lead_call_logs", "CASCADE", "NO ACTION", Arrays.asList("leadCallLogId"), Arrays.asList("id")));
+        final HashSet<TableInfo.Index> _indicesPostCallActivities = new HashSet<TableInfo.Index>(2);
+        _indicesPostCallActivities.add(new TableInfo.Index("index_post_call_activities_leadId", false, Arrays.asList("leadId"), Arrays.asList("ASC")));
+        _indicesPostCallActivities.add(new TableInfo.Index("index_post_call_activities_leadCallLogId", false, Arrays.asList("leadCallLogId"), Arrays.asList("ASC")));
+        final TableInfo _infoPostCallActivities = new TableInfo("post_call_activities", _columnsPostCallActivities, _foreignKeysPostCallActivities, _indicesPostCallActivities);
+        final TableInfo _existingPostCallActivities = TableInfo.read(db, "post_call_activities");
+        if (!_infoPostCallActivities.equals(_existingPostCallActivities)) {
+          return new RoomOpenHelper.ValidationResult(false, "post_call_activities(com.enjay.crm.callsync.data.local.PostCallActivityEntity).\n"
+                  + " Expected:\n" + _infoPostCallActivities + "\n"
+                  + " Found:\n" + _existingPostCallActivities);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "971193405110fd5aaf2d8dc8b9d3d0ab", "a5be8146d678f16bd49795b49dce5128");
+    }, "135693dd542c9244891b123893baac26", "4a39916f59ce76923699e7490690ea86");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -145,7 +175,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "leads","lead_call_logs");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "leads","lead_call_logs","post_call_activities");
   }
 
   @Override
@@ -163,6 +193,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       }
       _db.execSQL("DELETE FROM `leads`");
       _db.execSQL("DELETE FROM `lead_call_logs`");
+      _db.execSQL("DELETE FROM `post_call_activities`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -182,6 +213,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
     _typeConvertersMap.put(LeadDao.class, LeadDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(LeadCallLogDao.class, LeadCallLogDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(PostCallActivityDao.class, PostCallActivityDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -224,6 +256,20 @@ public final class AppDatabase_Impl extends AppDatabase {
           _leadCallLogDao = new LeadCallLogDao_Impl(this);
         }
         return _leadCallLogDao;
+      }
+    }
+  }
+
+  @Override
+  public PostCallActivityDao postCallActivityDao() {
+    if (_postCallActivityDao != null) {
+      return _postCallActivityDao;
+    } else {
+      synchronized(this) {
+        if(_postCallActivityDao == null) {
+          _postCallActivityDao = new PostCallActivityDao_Impl(this);
+        }
+        return _postCallActivityDao;
       }
     }
   }

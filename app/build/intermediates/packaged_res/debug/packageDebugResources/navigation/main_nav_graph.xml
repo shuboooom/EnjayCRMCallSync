@@ -46,4 +46,9 @@
         android:id="@+id/leadDetailFragment"
         android:name="com.enjay.crm.callsync.ui.leads.LeadDetailFragment"
         android:label="@string/title_lead_detail" />
+
+    <fragment
+        android:id="@+id/postCallDetailFragment"
+        android:name="com.enjay.crm.callsync.ui.postcall.PostCallDetailFragment"
+        android:label="@string/title_post_call_detail" />
 </navigation>

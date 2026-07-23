@@ -4,6 +4,7 @@ package com.enjay.crm.callsync.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,34 +21,30 @@ public final class ItemLeadCallLogBinding implements ViewBinding {
   private final MaterialCardView rootView;
 
   @NonNull
-  public final TextView callTypeText;
+  public final ItemCallLogBinding callLogCard;
 
   @NonNull
-  public final TextView durationText;
+  public final TextView postCallSummaryBodyText;
 
   @NonNull
-  public final TextView endTimeText;
+  public final LinearLayout postCallSummaryCard;
 
   @NonNull
-  public final TextView phoneNumberText;
+  public final TextView postCallSummaryTitleText;
 
   @NonNull
-  public final TextView startTimeText;
+  public final TextView viewPostCallText;
 
-  @NonNull
-  public final TextView timestampText;
-
-  private ItemLeadCallLogBinding(@NonNull MaterialCardView rootView, @NonNull TextView callTypeText,
-      @NonNull TextView durationText, @NonNull TextView endTimeText,
-      @NonNull TextView phoneNumberText, @NonNull TextView startTimeText,
-      @NonNull TextView timestampText) {
+  private ItemLeadCallLogBinding(@NonNull MaterialCardView rootView,
+      @NonNull ItemCallLogBinding callLogCard, @NonNull TextView postCallSummaryBodyText,
+      @NonNull LinearLayout postCallSummaryCard, @NonNull TextView postCallSummaryTitleText,
+      @NonNull TextView viewPostCallText) {
     this.rootView = rootView;
-    this.callTypeText = callTypeText;
-    this.durationText = durationText;
-    this.endTimeText = endTimeText;
-    this.phoneNumberText = phoneNumberText;
-    this.startTimeText = startTimeText;
-    this.timestampText = timestampText;
+    this.callLogCard = callLogCard;
+    this.postCallSummaryBodyText = postCallSummaryBodyText;
+    this.postCallSummaryCard = postCallSummaryCard;
+    this.postCallSummaryTitleText = postCallSummaryTitleText;
+    this.viewPostCallText = viewPostCallText;
   }
 
   @Override
@@ -77,44 +74,39 @@ public final class ItemLeadCallLogBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.callTypeText;
-      TextView callTypeText = ViewBindings.findChildViewById(rootView, id);
-      if (callTypeText == null) {
+      id = R.id.callLogCard;
+      View callLogCard = ViewBindings.findChildViewById(rootView, id);
+      if (callLogCard == null) {
+        break missingId;
+      }
+      ItemCallLogBinding binding_callLogCard = ItemCallLogBinding.bind(callLogCard);
+
+      id = R.id.postCallSummaryBodyText;
+      TextView postCallSummaryBodyText = ViewBindings.findChildViewById(rootView, id);
+      if (postCallSummaryBodyText == null) {
         break missingId;
       }
 
-      id = R.id.durationText;
-      TextView durationText = ViewBindings.findChildViewById(rootView, id);
-      if (durationText == null) {
+      id = R.id.postCallSummaryCard;
+      LinearLayout postCallSummaryCard = ViewBindings.findChildViewById(rootView, id);
+      if (postCallSummaryCard == null) {
         break missingId;
       }
 
-      id = R.id.endTimeText;
-      TextView endTimeText = ViewBindings.findChildViewById(rootView, id);
-      if (endTimeText == null) {
+      id = R.id.postCallSummaryTitleText;
+      TextView postCallSummaryTitleText = ViewBindings.findChildViewById(rootView, id);
+      if (postCallSummaryTitleText == null) {
         break missingId;
       }
 
-      id = R.id.phoneNumberText;
-      TextView phoneNumberText = ViewBindings.findChildViewById(rootView, id);
-      if (phoneNumberText == null) {
+      id = R.id.viewPostCallText;
+      TextView viewPostCallText = ViewBindings.findChildViewById(rootView, id);
+      if (viewPostCallText == null) {
         break missingId;
       }
 
-      id = R.id.startTimeText;
-      TextView startTimeText = ViewBindings.findChildViewById(rootView, id);
-      if (startTimeText == null) {
-        break missingId;
-      }
-
-      id = R.id.timestampText;
-      TextView timestampText = ViewBindings.findChildViewById(rootView, id);
-      if (timestampText == null) {
-        break missingId;
-      }
-
-      return new ItemLeadCallLogBinding((MaterialCardView) rootView, callTypeText, durationText,
-          endTimeText, phoneNumberText, startTimeText, timestampText);
+      return new ItemLeadCallLogBinding((MaterialCardView) rootView, binding_callLogCard,
+          postCallSummaryBodyText, postCallSummaryCard, postCallSummaryTitleText, viewPostCallText);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

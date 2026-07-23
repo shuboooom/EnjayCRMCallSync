@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface LeadCallLogRepository {
     fun observeLeadCallLogs(leadId: Long): Flow<List<LeadCallLogEntity>>
-    suspend fun addLeadCallLog(callLog: LeadCallLogEntity): Boolean
+    suspend fun addLeadCallLog(callLog: LeadCallLogEntity): Long
 }

@@ -13,8 +13,8 @@ class RoomLeadCallLogRepository(
         return leadCallLogDao.observeLeadCallLogs(leadId)
     }
 
-    override suspend fun addLeadCallLog(callLog: LeadCallLogEntity): Boolean {
-        val result = leadCallLogDao.insertLeadCallLog(callLog) != -1L
+    override suspend fun addLeadCallLog(callLog: LeadCallLogEntity): Long {
+        val result = leadCallLogDao.insertLeadCallLog(callLog)
         Log.d(
             TAG,
             "addLeadCallLog: result=$result deviceCallLogId=${callLog.deviceCallLogId} leadId=${callLog.leadId} phone=${callLog.phoneNumber}",

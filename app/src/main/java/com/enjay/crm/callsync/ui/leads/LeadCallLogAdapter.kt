@@ -1,26 +1,27 @@
 package com.enjay.crm.callsync.ui.leads
 
 import android.content.res.ColorStateList
-import android.view.View
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.enjay.crm.callsync.R
-import com.enjay.crm.callsync.data.local.LeadCallLogEntity
 import com.enjay.crm.callsync.data.model.CallType
-import com.enjay.crm.callsync.databinding.ItemCallLogBinding
+import com.enjay.crm.callsync.databinding.ItemLeadCallLogBinding
 import com.enjay.crm.callsync.util.AvatarGenerator
 import com.enjay.crm.callsync.util.CallLogFormatter
 
-class LeadCallLogAdapter :
-    ListAdapter<LeadCallLogEntity, LeadCallLogAdapter.LeadCallLogViewHolder>(DiffCallback) {
+class LeadCallLogAdapter(
+    private val onPostCallClicked: (Long) -> Unit,
+) : ListAdapter<LeadCallLogItemUiModel, LeadCallLogAdapter.LeadCallLogViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeadCallLogViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return LeadCallLogViewHolder(ItemCallLogBinding.inflate(inflater, parent, false))
+        return LeadCallLogViewHolder(ItemLeadCallLogBinding.inflate(inflater, parent, false), onPostCallClicked)
     }
 
     override fun onBindViewHolder(holder: LeadCallLogViewHolder, position: Int) {
@@ -28,41 +29,63 @@ class LeadCallLogAdapter :
     }
 
     class LeadCallLogViewHolder(
-        private val binding: ItemCallLogBinding,
+        private val binding: ItemLeadCallLogBinding,
+        private val onPostCallClicked: (Long) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: LeadCallLogEntity) {
+        fun bind(item: LeadCallLogItemUiModel) {
             val context = binding.root.context
-            val displayName = item.phoneNumber
+            val callLog = item.callLog
+            val displayName = callLog.phoneNumber
             val avatar = AvatarGenerator.create(displayName)
+            val callBinding = binding.callLogCard
+            val innerCard = callBinding.root as MaterialCardView
 
-            binding.avatarText.text = avatar.label
-            binding.avatarText.setTextColor(ContextCompat.getColor(context, avatar.foregroundColorRes))
-            binding.avatarContainer.setCardBackgroundColor(ContextCompat.getColor(context, avatar.backgroundColorRes))
-            binding.nameText.text = displayName
+            (innerCard.layoutParams as? ViewGroup.MarginLayoutParams)?.bottomMargin = 0
+            innerCard.setCardBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
+            innerCard.cardElevation = 0f
+            innerCard.strokeWidth = 0
+            callBinding.avatarText.text = avatar.label
+            callBinding.avatarText.setTextColor(ContextCompat.getColor(context, avatar.foregroundColorRes))
+            callBinding.avatarContainer.setCardBackgroundColor(ContextCompat.getColor(context, avatar.backgroundColorRes))
+            callBinding.nameText.text = displayName
 
-            val typeColor = ContextCompat.getColor(context, item.callType.badgeForeground())
-            binding.typeText.text = item.callType.label(context)
-            binding.typeText.setTextColor(typeColor)
-            binding.typeIcon.setImageResource(item.callType.directionIcon())
-            binding.typeIcon.imageTintList = ColorStateList.valueOf(typeColor)
+            val typeColor = ContextCompat.getColor(context, callLog.callType.badgeForeground())
+            callBinding.typeText.text = callLog.callType.label(context)
+            callBinding.typeText.setTextColor(typeColor)
+            callBinding.typeIcon.setImageResource(callLog.callType.directionIcon())
+            callBinding.typeIcon.imageTintList = ColorStateList.valueOf(typeColor)
 
-            binding.timeText.text = CallLogFormatter.formatTime(item.startTime)
-            binding.durationText.text = CallLogFormatter.formatDuration(item.durationSeconds)
-            val hasDuration = item.durationSeconds > 0
-            binding.durationIcon.visibility = if (hasDuration) View.VISIBLE else View.GONE
-            binding.durationText.visibility = if (hasDuration) View.VISIBLE else View.GONE
-            binding.callActionIcon.visibility = View.GONE
+            callBinding.timeText.text = CallLogFormatter.formatTime(callLog.startTime)
+            callBinding.durationText.text = CallLogFormatter.formatDuration(callLog.durationSeconds)
+            val hasDuration = callLog.durationSeconds > 0
+            callBinding.durationIcon.visibility = if (hasDuration) View.VISIBLE else View.GONE
+            callBinding.durationText.visibility = if (hasDuration) View.VISIBLE else View.GONE
+            callBinding.callActionIcon.visibility = View.GONE
+
+            val postCallActivity = item.postCallActivity
+            binding.postCallSummaryCard.visibility = if (postCallActivity != null) View.VISIBLE else View.GONE
+            if (postCallActivity != null) {
+                binding.viewPostCallText.setOnClickListener {
+                    onPostCallClicked(postCallActivity.id)
+                }
+                binding.postCallSummaryCard.setOnClickListener {
+                    onPostCallClicked(postCallActivity.id)
+                }
+            } else {
+                binding.viewPostCallText.setOnClickListener(null)
+                binding.postCallSummaryCard.setOnClickListener(null)
+            }
         }
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<LeadCallLogEntity>() {
-            override fun areItemsTheSame(oldItem: LeadCallLogEntity, newItem: LeadCallLogEntity): Boolean {
-                return oldItem.id == newItem.id
+        private val DiffCallback = object : DiffUtil.ItemCallback<LeadCallLogItemUiModel>() {
+            override fun areItemsTheSame(oldItem: LeadCallLogItemUiModel, newItem: LeadCallLogItemUiModel): Boolean {
+                return oldItem.callLog.id == newItem.callLog.id
             }
 
-            override fun areContentsTheSame(oldItem: LeadCallLogEntity, newItem: LeadCallLogEntity): Boolean {
+            override fun areContentsTheSame(oldItem: LeadCallLogItemUiModel, newItem: LeadCallLogItemUiModel): Boolean {
                 return oldItem == newItem
             }
         }

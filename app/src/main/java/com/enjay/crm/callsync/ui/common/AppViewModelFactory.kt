@@ -8,11 +8,13 @@ import com.enjay.crm.callsync.ui.calls.CallsViewModel
 import com.enjay.crm.callsync.ui.leads.AddLeadViewModel
 import com.enjay.crm.callsync.ui.leads.LeadDetailViewModel
 import com.enjay.crm.callsync.ui.leads.LeadsViewModel
+import com.enjay.crm.callsync.ui.postcall.PostCallDetailViewModel
 import com.enjay.crm.callsync.ui.permissions.PermissionsViewModel
 
 class AppViewModelFactory(
     private val application: Application,
     private val leadId: Long? = null,
+    private val postCallActivityId: Long? = null,
 ) : ViewModelProvider.Factory {
 
     private val container = (application as EnjayCallSyncApp).appContainer
@@ -45,7 +47,16 @@ class AppViewModelFactory(
                     leadId = requireNotNull(leadId),
                     leadRepository = container.leadRepository,
                     leadCallLogRepository = container.leadCallLogRepository,
+                    postCallActivityRepository = container.postCallActivityRepository,
                     contactsRepository = container.contactsRepository,
+                ) as T
+            }
+
+            modelClass.isAssignableFrom(PostCallDetailViewModel::class.java) -> {
+                PostCallDetailViewModel(
+                    postCallActivityId = requireNotNull(postCallActivityId),
+                    postCallActivityRepository = container.postCallActivityRepository,
+                    leadRepository = container.leadRepository,
                 ) as T
             }
 

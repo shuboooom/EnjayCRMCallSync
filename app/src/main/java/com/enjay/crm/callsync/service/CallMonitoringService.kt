@@ -9,8 +9,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.os.Handler
 import android.os.Build
 import android.os.IBinder
+import android.os.Looper
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
@@ -20,6 +22,7 @@ import androidx.core.content.getSystemService
 import com.enjay.crm.callsync.EnjayCallSyncApp
 import com.enjay.crm.callsync.R
 import com.enjay.crm.callsync.data.local.LeadCallLogEntity
+import com.enjay.crm.callsync.ui.postcall.PostCallActivityFormActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -31,8 +34,10 @@ class CallMonitoringService : Service() {
 
     private val telephonyManager by lazy { getSystemService<TelephonyManager>() }
     private val notificationManager by lazy { getSystemService<NotificationManager>() }
-    private val appContainer by lazy { (application as EnjayCallSyncApp).appContainer }
+    private val app by lazy { application as EnjayCallSyncApp }
+    private val appContainer by lazy { app.appContainer }
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val mainHandler = Handler(Looper.getMainLooper())
 
     private var telephonyCallback: TelephonyCallback? = null
     private var phoneStateListener: PhoneStateListener? = null
@@ -61,7 +66,7 @@ class CallMonitoringService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun startForegroundInternal() {
-        val notification = buildNotification(currentCallState)
+        val notification = buildServiceNotification(currentCallState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
                 NOTIFICATION_ID,
@@ -121,7 +126,7 @@ class CallMonitoringService : Service() {
         val previousState = currentCallState
         currentCallState = state
         Log.d(TAG, "onCallStateUpdated: previousState=$previousState newState=$state")
-        notificationManager?.notify(NOTIFICATION_ID, buildNotification(state))
+        notificationManager?.notify(NOTIFICATION_ID, buildServiceNotification(state))
         if (previousState != TelephonyManager.CALL_STATE_IDLE && state == TelephonyManager.CALL_STATE_IDLE) {
             captureCompletedCall(System.currentTimeMillis())
         }
@@ -170,7 +175,7 @@ class CallMonitoringService : Service() {
 
                 val startTime = latestCall.timestamp
                 val endTime = startTime + (latestCall.durationSeconds * 1000L)
-                val inserted = appContainer.leadCallLogRepository.addLeadCallLog(
+                val insertedId = appContainer.leadCallLogRepository.addLeadCallLog(
                     LeadCallLogEntity(
                         leadId = lead.id,
                         deviceCallLogId = latestCall.id,
@@ -185,10 +190,29 @@ class CallMonitoringService : Service() {
                 )
                 Log.d(
                     TAG,
-                    "captureCompletedCall: insertResult=$inserted leadId=${lead.id} callLogId=${latestCall.id} phone=$phoneNumber",
+                    "captureCompletedCall: insertResult=$insertedId leadId=${lead.id} callLogId=${latestCall.id} phone=$phoneNumber",
                 )
-                if (inserted) {
+                if (insertedId > 0L) {
                     lastProcessedCallLogId = latestCall.id
+                    if (latestCall.durationSeconds <= 0L) {
+                        Log.d(
+                            TAG,
+                            "captureCompletedCall: skipping post-call prompt for unanswered callLogId=${latestCall.id}",
+                        )
+                        return@launch
+                    }
+                    val launchIntent = createPostCallActivityIntent(
+                        leadId = lead.id,
+                        leadCallLogId = insertedId,
+                        leadName = lead.name,
+                        phoneNumber = phoneNumber,
+                        callType = latestCall.callType.name,
+                        callTimestamp = latestCall.timestamp,
+                        callDurationSeconds = latestCall.durationSeconds,
+                    )
+                    if (!launchPostCallActivityInApp(launchIntent)) {
+                        showPostCallNotification(launchIntent, lead.name, phoneNumber, insertedId)
+                    }
                     return@launch
                 }
             }
@@ -196,7 +220,72 @@ class CallMonitoringService : Service() {
         }
     }
 
-    private fun buildNotification(state: Int): Notification {
+    private fun createPostCallActivityIntent(
+        leadId: Long,
+        leadCallLogId: Long,
+        leadName: String,
+        phoneNumber: String,
+        callType: String,
+        callTimestamp: Long,
+        callDurationSeconds: Long,
+    ): Intent {
+        return Intent(this, PostCallActivityFormActivity::class.java).apply {
+            putExtra(PostCallActivityFormActivity.EXTRA_LEAD_ID, leadId)
+            putExtra(PostCallActivityFormActivity.EXTRA_LEAD_CALL_LOG_ID, leadCallLogId)
+            putExtra(PostCallActivityFormActivity.EXTRA_LEAD_NAME, leadName)
+            putExtra(PostCallActivityFormActivity.EXTRA_PHONE_NUMBER, phoneNumber)
+            putExtra(PostCallActivityFormActivity.EXTRA_CALL_TYPE, callType)
+            putExtra(PostCallActivityFormActivity.EXTRA_CALL_TIMESTAMP, callTimestamp)
+            putExtra(PostCallActivityFormActivity.EXTRA_CALL_DURATION_SECONDS, callDurationSeconds)
+        }
+    }
+
+    private fun launchPostCallActivityInApp(intent: Intent): Boolean {
+        val activity = app.appVisibilityTracker.currentVisibleMainActivity() ?: return false
+        val launchIntent = Intent(intent).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        mainHandler.post {
+            app.appVisibilityTracker.currentVisibleMainActivity()
+                ?.takeIf { it === activity }
+                ?.startActivity(launchIntent)
+        }
+        return true
+    }
+
+    private fun showPostCallNotification(
+        activityIntent: Intent,
+        leadName: String,
+        phoneNumber: String,
+        leadCallLogId: Long,
+    ) {
+        val notificationId = POST_CALL_NOTIFICATION_ID_BASE + leadCallLogId.toInt()
+        val intent = Intent(activityIntent).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra(PostCallActivityFormActivity.EXTRA_NOTIFICATION_ID, notificationId)
+        }
+        val contentIntent = PendingIntent.getActivity(
+            this,
+            notificationId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+        val displayName = leadName.ifBlank { phoneNumber }
+        notificationManager?.notify(
+            notificationId,
+            NotificationCompat.Builder(this, POST_CALL_NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_call_24)
+                .setContentTitle(getString(R.string.post_call_notification_title, displayName))
+                .setContentText(getString(R.string.post_call_notification_body))
+                .setContentIntent(contentIntent)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .build(),
+        )
+    }
+
+    private fun buildServiceNotification(state: Int): Notification {
         val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
         val contentIntent = PendingIntent.getActivity(
             this,
@@ -225,19 +314,29 @@ class CallMonitoringService : Service() {
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val manager = notificationManager ?: return
-        val channel = NotificationChannel(
+        val serviceChannel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             getString(R.string.call_monitor_channel_name),
             NotificationManager.IMPORTANCE_LOW,
         ).apply {
             description = getString(R.string.call_monitor_channel_description)
         }
-        manager.createNotificationChannel(channel)
+        val postCallChannel = NotificationChannel(
+            POST_CALL_NOTIFICATION_CHANNEL_ID,
+            getString(R.string.post_call_notification_channel_name),
+            NotificationManager.IMPORTANCE_HIGH,
+        ).apply {
+            description = getString(R.string.post_call_notification_channel_description)
+        }
+        manager.createNotificationChannel(serviceChannel)
+        manager.createNotificationChannel(postCallChannel)
     }
 
     companion object {
         private const val NOTIFICATION_CHANNEL_ID = "call_monitoring"
+        private const val POST_CALL_NOTIFICATION_CHANNEL_ID = "post_call_activity"
         private const val NOTIFICATION_ID = 4012
+        private const val POST_CALL_NOTIFICATION_ID_BASE = 9000
         private const val MATCH_WINDOW_BEFORE_MS = 120_000L
         private const val MATCH_WINDOW_AFTER_MS = 15_000L
         private const val TAG = "EnjayCallSync"
