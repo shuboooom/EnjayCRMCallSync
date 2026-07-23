@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.enjay.crm.callsync.PhoneNumberNormalizerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-23T12:53:08" hostname="Shubhams-Mac-mini.local" time="0.035">
+<testsuite name="com.enjay.crm.callsync.PhoneNumberNormalizerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-07-23T13:33:30" hostname="Shubhams-Mac-mini.local" time="0.047">
   <properties/>
-  <testcase name="lookup_keys_bridge_international_and_local_forms" classname="com.enjay.crm.callsync.PhoneNumberNormalizerTest" time="0.034"/>
+  <testcase name="lookup_keys_bridge_international_and_local_forms" classname="com.enjay.crm.callsync.PhoneNumberNormalizerTest" time="0.047"/>
   <testcase name="normalize_returns_digits_only" classname="com.enjay.crm.callsync.PhoneNumberNormalizerTest" time="0.0"/>
   <testcase name="stripsNonDigitsInsideNumber" classname="com.enjay.crm.callsync.PhoneNumberNormalizerTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
