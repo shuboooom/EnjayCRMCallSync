@@ -12,9 +12,11 @@ import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavGraph
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -64,10 +66,25 @@ class MainActivity : AppCompatActivity() {
         )
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
-            if (navController.currentDestination?.id == item.itemId) {
+            val selectedTopLevelDestination = navController.currentDestination
+                ?.hierarchy
+                ?.firstOrNull { destination -> TOP_LEVEL_DESTINATIONS.contains(destination.id) }
+                ?.id
+            if (selectedTopLevelDestination == item.itemId) {
                 true
             } else {
-                item.onNavDestinationSelected(navController)
+                navController.navigate(
+                    item.itemId,
+                    null,
+                    navOptions {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                    },
+                )
+                true
             }
         }
         binding.bottomNavigation.setOnItemReselectedListener { }
@@ -85,6 +102,14 @@ class MainActivity : AppCompatActivity() {
             if (showBottomNav) {
                 binding.bottomNavigation.visibility = View.VISIBLE
             }
+            destination.hierarchy
+                .firstOrNull { currentDestination -> TOP_LEVEL_DESTINATIONS.contains(currentDestination.id) }
+                ?.id
+                ?.let { topLevelDestinationId ->
+                    if (binding.bottomNavigation.selectedItemId != topLevelDestinationId) {
+                        binding.bottomNavigation.menu.findItem(topLevelDestinationId)?.isChecked = true
+                    }
+                }
 
             val titleRes = when (destination.id) {
                 R.id.permissionsFragment -> R.string.title_permissions
@@ -171,5 +196,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun List<WorkInfo>.anyRunning(): Boolean {
         return any { it.state == WorkInfo.State.RUNNING }
+    }
+
+    private companion object {
+        val TOP_LEVEL_DESTINATIONS = setOf(
+            R.id.callsFragment,
+            R.id.leadsFragment,
+            R.id.moreFragment,
+        )
     }
 }
