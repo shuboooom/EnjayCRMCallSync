@@ -43,23 +43,16 @@ public final class ItemCallLogBinding implements ViewBinding {
   public final TextView nameText;
 
   @NonNull
-  public final TextView timeIcon;
-
-  @NonNull
   public final TextView timeText;
 
   @NonNull
   public final ImageView typeIcon;
 
-  @NonNull
-  public final TextView typeText;
-
   private ItemCallLogBinding(@NonNull MaterialCardView rootView,
       @NonNull MaterialCardView avatarContainer, @NonNull TextView avatarText,
       @NonNull ImageView callActionIcon, @NonNull TextView durationIcon,
       @NonNull TextView durationText, @NonNull LinearLayout metaRow, @NonNull TextView nameText,
-      @NonNull TextView timeIcon, @NonNull TextView timeText, @NonNull ImageView typeIcon,
-      @NonNull TextView typeText) {
+      @NonNull TextView timeText, @NonNull ImageView typeIcon) {
     this.rootView = rootView;
     this.avatarContainer = avatarContainer;
     this.avatarText = avatarText;
@@ -68,10 +61,8 @@ public final class ItemCallLogBinding implements ViewBinding {
     this.durationText = durationText;
     this.metaRow = metaRow;
     this.nameText = nameText;
-    this.timeIcon = timeIcon;
     this.timeText = timeText;
     this.typeIcon = typeIcon;
-    this.typeText = typeText;
   }
 
   @Override
@@ -143,12 +134,6 @@ public final class ItemCallLogBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.timeIcon;
-      TextView timeIcon = ViewBindings.findChildViewById(rootView, id);
-      if (timeIcon == null) {
-        break missingId;
-      }
-
       id = R.id.timeText;
       TextView timeText = ViewBindings.findChildViewById(rootView, id);
       if (timeText == null) {
@@ -161,15 +146,8 @@ public final class ItemCallLogBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.typeText;
-      TextView typeText = ViewBindings.findChildViewById(rootView, id);
-      if (typeText == null) {
-        break missingId;
-      }
-
       return new ItemCallLogBinding((MaterialCardView) rootView, avatarContainer, avatarText,
-          callActionIcon, durationIcon, durationText, metaRow, nameText, timeIcon, timeText,
-          typeIcon, typeText);
+          callActionIcon, durationIcon, durationText, metaRow, nameText, timeText, typeIcon);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

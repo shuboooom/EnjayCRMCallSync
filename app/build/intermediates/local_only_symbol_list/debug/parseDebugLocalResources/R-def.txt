@@ -156,12 +156,10 @@ id syncStatusBodyText
 id syncStatusTitleText
 id syncWorkerStateText
 id syncWorkerTypeText
-id timeIcon
 id timeText
 id titleText
 id toolbar
 id typeIcon
-id typeText
 id viewPostCallText
 layout activity_main
 layout activity_post_call_activity_form

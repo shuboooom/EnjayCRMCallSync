@@ -57,8 +57,8 @@ class LeadCallLogAdapter(
             callBinding.nameText.text = displayName
 
             val typeColor = ContextCompat.getColor(context, callLog.callType.badgeForeground())
-            callBinding.typeText.text = callLog.callType.label(context)
-            callBinding.typeText.setTextColor(typeColor)
+//            callBinding.typeText.text = callLog.callType.label(context)
+//            callBinding.typeText.setTextColor(typeColor)
             callBinding.typeIcon.setImageResource(callLog.callType.directionIcon())
             callBinding.typeIcon.imageTintList = ColorStateList.valueOf(typeColor)
 

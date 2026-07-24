@@ -116,8 +116,8 @@ class CallLogAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.avatarText.setTextColor(ContextCompat.getColor(context, avatar.foregroundColorRes))
             binding.avatarContainer.setCardBackgroundColor(ContextCompat.getColor(context, avatar.backgroundColorRes))
             binding.nameText.text = displayName
-            binding.typeText.text = item.callType.displayLabel(context)
-            binding.typeText.setTextColor(ContextCompat.getColor(context, item.callType.badgeForeground()))
+//            binding.typeText.text = item.callType.displayLabel(context)
+//            binding.typeText.setTextColor(ContextCompat.getColor(context, item.callType.badgeForeground()))
             binding.typeIcon.setImageResource(item.callType.directionIcon())
             binding.typeIcon.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(context, item.callType.badgeForeground()))
             binding.timeText.text = CallLogFormatter.formatTime(item.timestamp)
